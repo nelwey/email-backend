@@ -1,0 +1,27 @@
+# compiled output
+/dist
+/node_modules
+/build
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# env
+.env
+.env.local
+.env.production
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# test
+/coverage
+/.nyc_output
+
+# OS
+.DS_Store
+Thumbs.db
