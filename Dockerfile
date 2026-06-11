@@ -7,7 +7,8 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 COPY nest-cli.json ./
 
-RUN npm ci
+# better-sqlite3 is dev-only (e2e tests) and needs native compile — skip in Docker
+RUN npm ci --ignore-scripts
 
 COPY . .
 RUN npm run build
