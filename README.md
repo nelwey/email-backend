@@ -27,7 +27,8 @@ CORS_ORIGIN=http://localhost:5173
 
 | Variable | Descripción |
 |----------|-------------|
-| `STAGE` | `dev` → sync schema; `prod` → sin auto-sync |
+| `DB_SYNC` | `true` por defecto (crea tablas en Neon). `false` tras primer deploy |
+| `STAGE` | `dev` / `prod` — entorno lógico |
 | `DB_HOST` | `db` en Docker; `localhost` en dev local; host Neon en Render |
 | `HOST_API` | URL pública del API (con `/api`) |
 | `CORS_ORIGIN` | Origen del frontend (coma para varios) |

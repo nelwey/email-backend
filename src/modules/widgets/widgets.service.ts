@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
   OnModuleInit,
 } from '@nestjs/common';
@@ -14,6 +15,8 @@ import { DEFAULT_WIDGETS } from './widgets.seed';
 
 @Injectable()
 export class WidgetsService implements OnModuleInit {
+  private readonly logger = new Logger(WidgetsService.name);
+
   constructor(
     @InjectRepository(WidgetEntity)
     private readonly widgetsRepo: Repository<WidgetEntity>,
@@ -24,7 +27,13 @@ export class WidgetsService implements OnModuleInit {
   }
 
   private async seedDefaultWidgets(): Promise<void> {
-    await this.widgetsRepo.delete({ type: 'product-recommendations' });
+    try {
+      await this.widgetsRepo.delete({ type: 'product-recommendations' });
+    } catch (error) {
+      this.logger.warn(
+        'No se pudo limpiar product-recommendations (tabla widgets aún no existe o DB_SYNC=false)',
+      );
+    }
 
     for (const widget of DEFAULT_WIDGETS) {
       const exists = await this.widgetsRepo.findOne({

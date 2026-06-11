@@ -29,7 +29,8 @@ export default () => {
       password: process.env.DB_PASSWORD ?? '',
       database: process.env.DB_NAME ?? 'TesloDB',
       ssl: !isLocalDbHost(dbHost),
-      synchronize: stage === 'dev',
+      // true by default (creates tables on Neon). Set DB_SYNC=false after first deploy.
+      synchronize: process.env.DB_SYNC !== 'false',
       logging: process.env.DB_LOGGING === 'true',
     },
   };
