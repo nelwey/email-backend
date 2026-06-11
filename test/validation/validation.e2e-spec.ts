@@ -15,14 +15,14 @@ describe('Validation (e2e)', () => {
 
   it('POST /templates — 400 без обязательного name', async () => {
     await request(app.getHttpServer())
-      .post('/templates')
+      .post('/api/templates')
       .send({ subject: 'Без имени', blocks: [] })
       .expect(400);
   });
 
   it('POST /templates — 400 при невалидной структуре блока', async () => {
     await request(app.getHttpServer())
-      .post('/templates')
+      .post('/api/templates')
       .send({
         name: 'Плохой шаблон',
         blocks: [{ id: '', type: '', props: 'not-an-object' }],
@@ -31,12 +31,12 @@ describe('Validation (e2e)', () => {
   });
 
   it('POST /widgets — 400 без type и label', async () => {
-    await request(app.getHttpServer()).post('/widgets').send({ description: 'x' }).expect(400);
+    await request(app.getHttpServer()).post('/api/widgets').send({ description: 'x' }).expect(400);
   });
 
   it('POST /export/html — 400 при лишних полях (forbidNonWhitelisted)', async () => {
     await request(app.getHttpServer())
-      .post('/export/html')
+      .post('/api/export/html')
       .send({
         subject: 'Test',
         blocks: [],
@@ -46,6 +46,6 @@ describe('Validation (e2e)', () => {
   });
 
   it('POST /widgets/qr/generate — 400 без content', async () => {
-    await request(app.getHttpServer()).post('/widgets/qr/generate').send({}).expect(400);
+    await request(app.getHttpServer()).post('/api/widgets/qr/generate').send({}).expect(400);
   });
 });

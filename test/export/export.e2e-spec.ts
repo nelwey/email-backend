@@ -16,7 +16,7 @@ describe('POST /export/html (e2e)', () => {
 
   it('возвращает сгенерированный HTML', async () => {
     const response = await request(app.getHttpServer())
-      .post('/export/html')
+      .post('/api/export/html')
       .send(sampleExportPayload)
       .expect(201);
 
@@ -27,7 +27,7 @@ describe('POST /export/html (e2e)', () => {
 
   it('отклоняет пустой массив blocks при отсутствии поля', async () => {
     await request(app.getHttpServer())
-      .post('/export/html')
+      .post('/api/export/html')
       .send({ subject: 'Без блоков' })
       .expect(400);
   });

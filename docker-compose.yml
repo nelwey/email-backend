@@ -1,20 +1,39 @@
 services:
-  postgres:
+  db:
     image: postgres:16-alpine
-    container_name: email-editor-postgres
+    container_name: email-db
     ports:
-      - '${POSTGRES_PORT:-5432}:5432'
+      - '${DB_PORT:-5432}:5432'
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-email_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-email_password}
-      POSTGRES_DB: ${POSTGRES_DB:-email_editor}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-MySecr3tPassWord@as2}
+      POSTGRES_DB: ${DB_NAME:-TesloDB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-email_user} -d ${POSTGRES_DB:-email_editor}']
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-TesloDB}']
       interval: 5s
       timeout: 5s
       retries: 5
+
+  api:
+    build: .
+    container_name: email-api
+    ports:
+      - '${PORT:-3000}:3000'
+    environment:
+      STAGE: dev
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-MySecr3tPassWord@as2}
+      DB_NAME: ${DB_NAME:-TesloDB}
+      PORT: 3000
+      HOST_API: http://localhost:3000/api
+      CORS_ORIGIN: http://localhost:5173
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:

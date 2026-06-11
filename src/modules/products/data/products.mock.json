@@ -1,32 +1,32 @@
 [
   {
     "name": "Информатика и вычислительная техника",
-    "image": "https://placehold.co/240x160/png?text=ИВТ",
+    "image": "https://placehold.co/320x214/png?text=IVT",
     "subtitle": "Бакалавриат · 4 года"
   },
   {
     "name": "Машиностроение",
-    "image": "https://placehold.co/240x160/png?text=Машиностроение",
+    "image": "https://placehold.co/320x214/png?text=Mech",
     "subtitle": "Бакалавриат · 4 года"
   },
   {
     "name": "Экономика и менеджмент",
-    "image": "https://placehold.co/240x160/png?text=Экономика",
+    "image": "https://placehold.co/320x214/png?text=Econ",
     "subtitle": "Магистратура · 2 года"
   },
   {
     "name": "Биотехнологии",
-    "image": "https://placehold.co/240x160/png?text=Биотех",
+    "image": "https://placehold.co/320x214/png?text=Biotech",
     "subtitle": "Бакалавриат · 4 года"
   },
   {
     "name": "Архитектура",
-    "image": "https://placehold.co/240x160/png?text=Архитектура",
+    "image": "https://placehold.co/320x214/png?text=Arch",
     "subtitle": "Бакалавриат · 5 лет"
   },
   {
     "name": "Энергетика",
-    "image": "https://placehold.co/240x160/png?text=Энергетика",
+    "image": "https://placehold.co/320x214/png?text=Energy",
     "subtitle": "Бакалавриат · 4 года"
   }
 ]

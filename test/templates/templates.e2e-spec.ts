@@ -16,13 +16,13 @@ describe('Templates API (e2e)', () => {
   });
 
   it('GET /templates — пустой список в начале', async () => {
-    const response = await request(app.getHttpServer()).get('/templates').expect(200);
+    const response = await request(app.getHttpServer()).get('/api/templates').expect(200);
     expect(Array.isArray(response.body.data)).toBe(true);
   });
 
   it('POST /templates — создаёт шаблон с JSON и HTML', async () => {
     const response = await request(app.getHttpServer())
-      .post('/templates')
+      .post('/api/templates')
       .send({
         name: 'Шаблон тест',
         subject: sampleExportPayload.subject,
@@ -37,7 +37,7 @@ describe('Templates API (e2e)', () => {
 
   it('GET /templates/:id — возвращает шаблон', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/templates/${templateId}`)
+      .get(`/api/templates/${templateId}`)
       .expect(200);
 
     expect(response.body.data.id).toBe(templateId);
@@ -46,7 +46,7 @@ describe('Templates API (e2e)', () => {
 
   it('PUT /templates/:id — обновляет шаблон', async () => {
     const response = await request(app.getHttpServer())
-      .put(`/templates/${templateId}`)
+      .put(`/api/templates/${templateId}`)
       .send({ name: 'Обновлённый шаблон', subject: 'Новая тема' })
       .expect(200);
 
@@ -55,8 +55,8 @@ describe('Templates API (e2e)', () => {
   });
 
   it('DELETE /templates/:id — удаляет шаблон', async () => {
-    await request(app.getHttpServer()).delete(`/templates/${templateId}`).expect(200);
+    await request(app.getHttpServer()).delete(`/api/templates/${templateId}`).expect(200);
 
-    await request(app.getHttpServer()).get(`/templates/${templateId}`).expect(404);
+    await request(app.getHttpServer()).get(`/api/templates/${templateId}`).expect(404);
   });
 });

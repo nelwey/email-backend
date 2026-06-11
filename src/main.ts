@@ -10,6 +10,8 @@ async function bootstrap() {
   const port = config.get<number>('port') ?? 3000;
   const corsOrigin = config.get<string>('corsOrigin') ?? 'http://localhost:5173';
 
+  app.setGlobalPrefix('api');
+
   app.enableCors({
     origin: corsOrigin.split(',').map((o) => o.trim()),
     credentials: true,
@@ -24,8 +26,8 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(port);
-  console.log(`Email backend running on http://localhost:${port}`);
+  await app.listen(port, '0.0.0.0');
+  console.log(`Email backend running on port ${port}`);
 }
 
 bootstrap();

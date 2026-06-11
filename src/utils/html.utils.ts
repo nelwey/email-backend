@@ -29,6 +29,22 @@ export function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
+/** URL absoluta segura para atributos src en clientes de correo (Gmail, Outlook) */
+export function emailSafeImageSrc(raw: string): string {
+  const trimmed = String(raw).trim();
+  if (!trimmed) return '';
+
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return '';
+    }
+    return escapeHtml(parsed.href);
+  } catch {
+    return escapeHtml(trimmed);
+  }
+}
+
 /** Ancho de columna de contenido (patrón similar a Unlayer) */
 export const EMAIL_CONTENT_MAX_WIDTH = 500;
 

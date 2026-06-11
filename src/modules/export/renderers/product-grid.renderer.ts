@@ -1,6 +1,10 @@
 import type { WidgetRenderer } from '../../../interfaces/widget-renderer.interface';
 import type { ProductItem } from '../../../types/editor.types';
-import { blockRow, escapeHtml } from '../../../utils/html.utils';
+import {
+  blockRow,
+  emailSafeImageSrc,
+  escapeHtml,
+} from '../../../utils/html.utils';
 
 function formatProductDetail(product: ProductItem): string {
   if (product.subtitle) {
@@ -29,14 +33,19 @@ export const productGridRenderer: WidgetRenderer = {
       const cells = chunk
         .map((product) => {
           const name = escapeHtml(product.name);
-          const image = escapeHtml(product.image);
+          const imageSrc = emailSafeImageSrc(product.image);
           const detail = formatProductDetail(product);
           const detailRow = detail
             ? `<tr><td style="padding:0 12px 12px;font-size:13px;line-height:1.4;color:#52525b;">${detail}</td></tr>`
             : '';
+          const imageRow = imageSrc
+            ? `<tr><td align="center" style="padding:8px;font-size:0;line-height:0;">
+                <img src="${imageSrc}" alt="${name}" width="160" height="107" border="0" style="display:block;width:160px;max-width:160px;height:auto;margin:0 auto;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" />
+              </td></tr>`
+            : '';
           return `<td class="product-cell stack-column" width="${cellWidth}%" valign="top" style="padding:${spacing / 2}px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e4e4e7;border-radius:8px;width:100%;background-color:#ffffff;">
-              <tr><td style="padding:8px;text-align:center;"><img class="fluid-img" src="${image}" alt="${name}" width="120" style="width:100%;max-width:160px;height:auto;border-radius:4px;margin:0 auto;display:block;" /></td></tr>
+              ${imageRow}
               <tr><td style="padding:8px 12px 4px;font-size:14px;font-weight:600;line-height:1.35;color:#18181b;">${name}</td></tr>
               ${detailRow}
             </table>

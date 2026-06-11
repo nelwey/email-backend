@@ -15,24 +15,24 @@ describe('GET /products/random (e2e)', () => {
 
   it('возвращает случайные товары', async () => {
     const response = await request(app.getHttpServer())
-      .get('/products/random?count=2')
+      .get('/api/products/random?count=2')
       .expect(200);
 
     expect(response.body.data).toHaveLength(2);
     expect(response.body.data[0]).toMatchObject({
       name: expect.any(String),
       image: expect.any(String),
-      price: expect.any(Number),
+      subtitle: expect.any(String),
     });
   });
 
-  it('возвращает mock-товары test1 и test2 из каталога', async () => {
+  it('возвращает программы из mock-каталога', async () => {
     const response = await request(app.getHttpServer())
-      .get('/products/random?count=8')
+      .get('/api/products/random?count=6')
       .expect(200);
 
     const names = response.body.data.map((p: { name: string }) => p.name);
-    expect(names).toContain('test1');
-    expect(names).toContain('test2');
+    expect(names.length).toBeGreaterThan(0);
+    expect(names.some((n: string) => n.includes('Информатика'))).toBe(true);
   });
 });

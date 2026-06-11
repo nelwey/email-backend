@@ -30,6 +30,7 @@ export async function createE2eApp(): Promise<INestApplication> {
   }).compile();
 
   const app = moduleFixture.createNestApplication();
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

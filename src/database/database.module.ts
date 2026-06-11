@@ -10,18 +10,7 @@ import { WidgetEntity } from './entities/widget.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const databaseUrl = config.get<string>('database.url');
-
-        if (databaseUrl) {
-          return {
-            type: 'postgres' as const,
-            url: databaseUrl,
-            ssl: config.get('nodeEnv') === 'production' ? { rejectUnauthorized: false } : false,
-            entities: [TemplateEntity, WidgetEntity],
-            synchronize: config.get<boolean>('database.synchronize'),
-            logging: config.get<boolean>('database.logging'),
-          };
-        }
+        const useSsl = config.get<boolean>('database.ssl');
 
         return {
           type: 'postgres' as const,
@@ -30,6 +19,7 @@ import { WidgetEntity } from './entities/widget.entity';
           username: config.get<string>('database.username'),
           password: config.get<string>('database.password'),
           database: config.get<string>('database.database'),
+          ssl: useSsl ? { rejectUnauthorized: false } : false,
           entities: [TemplateEntity, WidgetEntity],
           synchronize: config.get<boolean>('database.synchronize'),
           logging: config.get<boolean>('database.logging'),

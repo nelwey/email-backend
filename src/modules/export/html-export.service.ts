@@ -13,6 +13,10 @@ import {
   imageRenderer,
   textRenderer,
 } from './renderers/base.renderers';
+import {
+  getProductGridCount,
+  parseProductGridItems,
+} from './product-grid.utils';
 import { productGridRenderer } from './renderers/product-grid.renderer';
 import { qrCodeRenderer } from './renderers/qr-code.renderer';
 import { socialRenderer } from './renderers/social.renderer';
@@ -51,9 +55,20 @@ export class HtmlExportService {
     let products: ProductItem[] | undefined;
 
     if (block.type === 'product-grid') {
-      const count =
-        Number(block.props.rows ?? 1) * Number(block.props.columns ?? 2);
-      products = await this.productsService.getRandomProducts(count);
+      const count = getProductGridCount(
+        Number(block.props.rows ?? 1),
+        Number(block.props.columns ?? 2),
+      );
+      const savedItems = parseProductGridItems(block.props.items);
+
+      if (savedItems.length >= count) {
+        products = savedItems.slice(0, count);
+      } else if (savedItems.length > 0) {
+        const fillers = await this.productsService.getRandomProducts(count);
+        products = [...savedItems, ...fillers].slice(0, count);
+      } else {
+        products = await this.productsService.getRandomProducts(count);
+      }
     }
 
     const result = await renderer.render({ block, products });

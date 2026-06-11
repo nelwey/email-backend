@@ -14,7 +14,7 @@ describe('Widgets API (e2e)', () => {
   });
 
   it('GET /widgets — возвращает зарегистрированные виджеты', async () => {
-    const response = await request(app.getHttpServer()).get('/widgets').expect(200);
+    const response = await request(app.getHttpServer()).get('/api/widgets').expect(200);
 
     expect(response.body.data.length).toBeGreaterThanOrEqual(7);
     const types = response.body.data.map((w: { type: string }) => w.type);
@@ -26,7 +26,7 @@ describe('Widgets API (e2e)', () => {
 
   it('POST /widgets — регистрирует новый виджет', async () => {
     const response = await request(app.getHttpServer())
-      .post('/widgets')
+      .post('/api/widgets')
       .send({
         type: 'custom-banner',
         label: 'Баннер',
@@ -40,7 +40,7 @@ describe('Widgets API (e2e)', () => {
     expect(response.body.data.defaultConfig).toEqual({ title: 'Hello' });
 
     const getResponse = await request(app.getHttpServer())
-      .get(`/widgets/${response.body.data.id}`)
+      .get(`/api/widgets/${response.body.data.id}`)
       .expect(200);
 
     expect(getResponse.body.data.label).toBe('Баннер');
@@ -48,7 +48,7 @@ describe('Widgets API (e2e)', () => {
 
   it('POST /widgets/qr/generate — возвращает data URL', async () => {
     const response = await request(app.getHttpServer())
-      .post('/widgets/qr/generate')
+      .post('/api/widgets/qr/generate')
       .send({ content: 'https://example.com', size: 128 })
       .expect(201);
 
@@ -57,7 +57,7 @@ describe('Widgets API (e2e)', () => {
 
   it('POST /widgets — отклоняет дубликат type', async () => {
     await request(app.getHttpServer())
-      .post('/widgets')
+      .post('/api/widgets')
       .send({
         type: 'text',
         label: 'Дубликат',

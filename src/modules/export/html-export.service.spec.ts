@@ -75,6 +75,35 @@ describe('HtmlExportService', () => {
     expect(html).toContain('border:1px solid #e4e4e7');
   });
 
+  it('рендерит product-grid с пользовательскими изображениями из props.items', async () => {
+    const customImage = 'https://example.com/custom-ivt.png';
+    const html = await service.generateHtml({
+      subject: 'Направления',
+      blocks: [
+        {
+          id: 'p2',
+          type: 'product-grid',
+          props: {
+            title: 'Направления',
+            rows: 1,
+            columns: 1,
+            spacing: 12,
+            items: [
+              {
+                name: 'Информатика и вычислительная техника',
+                image: customImage,
+                subtitle: 'Бакалавриат · 4 года',
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    expect(html).toContain(customImage);
+    expect(html).toContain('Информатика и вычислительная техника');
+  });
+
   it('рендерит QR-код как data URL', async () => {
     const html = await service.generateHtml({
       subject: 'QR',
@@ -109,6 +138,28 @@ describe('HtmlExportService', () => {
 
     expect(html).toContain('https://t.me/test');
     expect(html).toContain('target="_blank"');
+    expect(html).toContain('text-align:center');
+    expect(html).toContain('margin:0 auto;');
+  });
+
+  it('рендерит social widget с выравниванием вправо', async () => {
+    const html = await service.generateHtml({
+      subject: 'Social',
+      blocks: [
+        {
+          id: 's2',
+          type: 'social',
+          props: {
+            align: 'right',
+            iconSize: 36,
+            links: [{ network: 'vk', url: 'https://vk.com/test', label: 'VK' }],
+          },
+        },
+      ],
+    });
+
+    expect(html).toContain('text-align:right');
+    expect(html).toContain('align="right"');
   });
 
   it('рендерит текст с saltos de párrafo y línea', async () => {

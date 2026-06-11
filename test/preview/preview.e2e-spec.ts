@@ -16,7 +16,7 @@ describe('POST /preview (e2e)', () => {
 
   it('возвращает preview HTML и метаданные', async () => {
     const response = await request(app.getHttpServer())
-      .post('/preview')
+      .post('/api/preview')
       .send(sampleExportPayload)
       .expect(201);
 

@@ -64,6 +64,7 @@ export const DEFAULT_WIDGETS: CreateWidgetDto[] = [
       rows: 2,
       columns: 2,
       spacing: 12,
+      items: [],
     },
     configSchema: {
       fields: [

@@ -24,12 +24,39 @@ const networkColors: Record<string, string> = {
   ok: '#EE8208',
 };
 
+function socialAlignStyles(align: string): {
+  cellAlign: 'left' | 'center' | 'right';
+  tableAlign: 'left' | 'center' | 'right';
+  tableMargin: string;
+} {
+  if (align === 'right') {
+    return {
+      cellAlign: 'right',
+      tableAlign: 'right',
+      tableMargin: 'margin:0 0 0 auto;',
+    };
+  }
+  if (align === 'left') {
+    return {
+      cellAlign: 'left',
+      tableAlign: 'left',
+      tableMargin: 'margin:0;',
+    };
+  }
+  return {
+    cellAlign: 'center',
+    tableAlign: 'center',
+    tableMargin: 'margin:0 auto;',
+  };
+}
+
 export const socialRenderer: WidgetRenderer = {
   type: 'social',
   render({ block }) {
     const links = (block.props.links as SocialLink[] | undefined) ?? [];
     const align = String(block.props.align ?? 'center');
-    const iconSize = Number(block.props.iconSize ?? 36);
+    const iconSize = Math.max(24, Math.min(64, Number(block.props.iconSize ?? 36)));
+    const { cellAlign, tableAlign, tableMargin } = socialAlignStyles(align);
 
     if (links.length === 0) {
       return blockRow(
@@ -43,14 +70,25 @@ export const socialRenderer: WidgetRenderer = {
         const url = escapeHtml(link.url);
         const label = escapeHtml(link.label ?? networkLabels[network] ?? network);
         const bg = networkColors[network] ?? '#52525b';
-        return `<td style="padding:0 6px;">
-          <a href="${url}" target="_blank" title="${label}" style="display:inline-block;width:${iconSize}px;height:${iconSize}px;line-height:${iconSize}px;background-color:${bg};color:#ffffff;text-decoration:none;border-radius:50%;text-align:center;font-size:11px;font-weight:700;">${label.slice(0, 2).toUpperCase()}</a>
+        const shortLabel = label.slice(0, 2).toUpperCase();
+        const fontSize = Math.max(10, Math.round(iconSize * 0.28));
+
+        return `<td align="center" valign="middle" style="padding:0 6px;font-size:0;line-height:0;">
+          <a href="${url}" target="_blank" title="${label}" style="display:block;width:${iconSize}px;height:${iconSize}px;line-height:${iconSize}px;background-color:${bg};color:#ffffff;text-decoration:none;border-radius:50%;text-align:center;font-size:${fontSize}px;font-weight:700;mso-line-height-rule:exactly;">${shortLabel}</a>
         </td>`;
       })
       .join('');
 
     return blockRow(
-      `<table role="presentation" class="stack-column" cellpadding="0" cellspacing="0" border="0" align="${align}" style="margin:0 auto;width:100%;"><tr>${icons}</tr></table>`,
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td align="${cellAlign}" style="text-align:${cellAlign};">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="${tableAlign}" style="${tableMargin}">
+              <tr>${icons}</tr>
+            </table>
+          </td>
+        </tr>
+      </table>`,
     );
   },
 };
